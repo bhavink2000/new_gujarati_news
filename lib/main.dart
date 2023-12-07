@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -17,11 +16,11 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const NGN());
+  runApp(NGN());
 }
 
 class NGN extends StatelessWidget{
-  const NGN({Key key}) : super(key: key);
+  const NGN({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
