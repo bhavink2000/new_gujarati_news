@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "148030468037",
+    "project_id": "new-gujarati-news",
+    "storage_bucket": "new-gujarati-news.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148030468037:android:92f071abc6fc2ff24a65ac",
+        "android_client_info": {
+          "package_name": "com.new_gujarati_news.ngnfinal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIDaDW_r0_P_b09kTQKYNICtY0WyVUa18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
