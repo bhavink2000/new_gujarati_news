@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +18,14 @@ import '../news_details_page.dart';
 
 class TagsNews extends StatefulWidget {
   var tagid,tagnm;
-  TagsNews({Key key,this.tagid,this.tagnm}) : super(key: key);
+  TagsNews({Key? key,this.tagid,this.tagnm}) : super(key: key);
 
   @override
   State<TagsNews> createState() => _TagsNewsState();
 }
 
 class _TagsNewsState extends State<TagsNews> {
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -50,14 +49,13 @@ class _TagsNewsState extends State<TagsNews> {
       backgroundColor: Colors.white,
       body: AnimationLimiter(
         child: isLoading == false
-            ? allNews.isNotEmpty ? ListView.builder(
+            ? allNews!.isNotEmpty ? ListView.builder(
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.vertical,
           controller: scrollController,
-          itemCount: isLoadingMore == false ? allNews.length + 1 :allNews.length,
+          itemCount: isLoadingMore == false ? allNews!.length + 1 :allNews!.length,
           itemBuilder: (context, index){
-            print("allNews.length-->${allNews.length}");
-            if(index < allNews.length){
+            if(index < allNews!.length){
               return AnimationConfiguration.staggeredList(
                 position: index,
                 duration: const Duration(milliseconds: 1000),
@@ -77,30 +75,30 @@ class _TagsNewsState extends State<TagsNews> {
                               child: InkWell(
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                                    categorynm: allNews[index].categoryName,
-                                    categoryid: allNews[index].categoryId,
-                                    title: allNews[index].title,
-                                    en_title: allNews[index].enTitle,
-                                    news_image: allNews[index].newsImage,
-                                    banner_description: allNews[index].bannerDescription,
-                                    description: allNews[index].description,
-                                    slug: allNews[index].slug,
-                                    started_at: allNews[index].startedAt,
-                                    ended_at: allNews[index].endedAt,
-                                    status: "${allNews[index].status}",
-                                    author_id: "${allNews[index].authorId}",
-                                    author_image: allNews[index].authorImage,
-                                    name: allNews[index].name,
-                                    image: allNews[index].authorImage,
-                                    tags: allNews[index].tags,
+                                    categoryNm: allNews?[index].categoryName,
+                                    categoryId: allNews?[index].categoryId,
+                                    title: allNews?[index].title,
+                                    en_title: allNews?[index].enTitle,
+                                    news_image: allNews?[index].newsImage,
+                                    banner_description: allNews?[index].bannerDescription,
+                                    description: allNews?[index].description,
+                                    slug: allNews?[index].slug,
+                                    started_at: allNews?[index].startedAt,
+                                    ended_at: allNews?[index].endedAt,
+                                    status: "${allNews?[index].status}",
+                                    author_id: "${allNews?[index].authorId}",
+                                    author_image: allNews?[index].authorImage,
+                                    name: allNews?[index].name,
+                                    image: allNews?[index].authorImage,
+                                    tags: allNews![index].tags,
                                   )));
                                 },
                                 child: Container(
                                   //color: Colors.yellow,
                                   width: MediaQuery.of(context).size.width / 3,
                                   height: MediaQuery.of(context).size.height / 8.8,
-                                  child: allNews[index].newsImage != null ? CachedNetworkImage(
-                                    imageUrl: allNews[index].newsImage,
+                                  child: allNews?[index].newsImage != null ? CachedNetworkImage(
+                                    imageUrl: allNews![index].newsImage,
                                     imageBuilder: (context, imageProvider) => Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
@@ -128,7 +126,7 @@ class _TagsNewsState extends State<TagsNews> {
                                   Row(
                                     children: [
                                       Text(
-                                        "${allNews[index].categoryName}",
+                                        "${allNews?[index].categoryName}",
                                         style: const TextStyle(fontFamily: FontType.PoppinsMedium,letterSpacing: 0.5,fontSize: 10,color: Colors.red),
                                       ),
                                       const Spacer(),
@@ -141,8 +139,8 @@ class _TagsNewsState extends State<TagsNews> {
                                           InkWell(
                                             onTap: (){
                                               ShareData().shareData(
-                                                allNews[index].title,
-                                                allNews[index].newsLink,
+                                                allNews?[index].title,
+                                                allNews?[index].newsLink,
                                               );
                                             },
                                             child: Image(
@@ -161,28 +159,28 @@ class _TagsNewsState extends State<TagsNews> {
                                     child: InkWell(
                                       onTap: (){
                                         Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                                          categorynm: allNews[index].categoryName,
-                                          categoryid: allNews[index].categoryId,
-                                          title: allNews[index].title,
-                                          en_title: allNews[index].enTitle,
-                                          news_image: allNews[index].newsImage,
-                                          banner_description: allNews[index].bannerDescription,
-                                          description: allNews[index].description,
-                                          slug: allNews[index].slug,
-                                          started_at: allNews[index].startedAt,
-                                          ended_at: allNews[index].endedAt,
-                                          status: "${allNews[index].status}",
-                                          author_id: "${allNews[index].authorId}",
-                                          author_image: allNews[index].authorImage,
-                                          name: allNews[index].name,
-                                          image: allNews[index].authorImage,
-                                          tags: allNews[index].tags,
+                                          categoryNm: allNews?[index].categoryName,
+                                          categoryId: allNews?[index].categoryId,
+                                          title: allNews?[index].title,
+                                          en_title: allNews?[index].enTitle,
+                                          news_image: allNews?[index].newsImage,
+                                          banner_description: allNews?[index].bannerDescription,
+                                          description: allNews?[index].description,
+                                          slug: allNews?[index].slug,
+                                          started_at: allNews?[index].startedAt,
+                                          ended_at: allNews?[index].endedAt,
+                                          status: "${allNews?[index].status}",
+                                          author_id: "${allNews?[index].authorId}",
+                                          author_image: allNews?[index].authorImage,
+                                          name: allNews?[index].name,
+                                          image: allNews?[index].authorImage,
+                                          tags: allNews![index].tags,
                                         )));
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                                         child: Text(
-                                          allNews[index].title,
+                                          allNews![index].title,
                                           maxLines: 3,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(fontSize: 14,fontFamily: FontType.AnekGujaratiSemiBold),
@@ -202,7 +200,7 @@ class _TagsNewsState extends State<TagsNews> {
               );
             }
             else{
-              return allNews.length == 25 ? Center(
+              return allNews!.length == 25 ? Center(
                 child: CircularProgressIndicator(
                   color: RedColor,
                 ),
@@ -232,10 +230,10 @@ class _TagsNewsState extends State<TagsNews> {
     }
   }
 
-  Future<GeneralNewsModel> allNewsOBJ;
+  Future<GeneralNewsModel?>? allNewsOBJ;
   List<GNews> allNewsSData = [];
   List<GData> allNewsMData = [];
-  List<GNews> allNews;
+  List<GNews>? allNews;
 
   getNews(var tagid,offset) async {
     setState(() {
@@ -243,8 +241,8 @@ class _TagsNewsState extends State<TagsNews> {
     });
     try {
       allNewsOBJ = ApiFuture().tagsNews(ApiUrl.AllNews,tagid,offset);
-      await allNewsOBJ.then((value) async {
-        allNewsSData.addAll(value.data.news);
+      await allNewsOBJ!.then((value) async {
+        allNewsSData.addAll(value!.data.news);
         allNewsMData.add(value.data);
       });
       setState(() {

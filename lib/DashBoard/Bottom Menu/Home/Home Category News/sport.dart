@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -16,14 +15,14 @@ import '../news_details_page.dart';
 
 
 class SportN extends StatefulWidget {
-  const SportN({Key key}) : super(key: key);
+  const SportN({Key? key}) : super(key: key);
 
   @override
   State<SportN> createState() => _SportNState();
 }
 
 class _SportNState extends State<SportN> {
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -45,10 +44,10 @@ class _SportNState extends State<SportN> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height / 2.43,
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      //color: Colors.green,
       child: Card(
         elevation: 6,
         shadowColor: PurpleColor,
+        color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,31 +69,31 @@ class _SportNState extends State<SportN> {
               child: isLoading == false ? ListView.builder(
                 scrollDirection: Axis.horizontal,
                 controller: scrollController,
-                itemCount: isLoadingMore == false ? sportNews.length + 1  : sportNews.length,
+                itemCount: isLoadingMore == false ? sportNews!.length + 1  : sportNews!.length,
                 itemBuilder: (context, index){
-                  if(index < sportNews.length){
+                  if(index < sportNews!.length){
                     DateFormat format = DateFormat("yyyy-MM-dd HH:mm:ss");
-                    var formattedDate = format.parse(sportNews[index].startedAt.toString());
+                    var formattedDate = format.parse(sportNews![index].startedAt.toString());
                     var mDate = DateFormat.yMMMd().format(formattedDate);
                     var time = DateFormat.jm().format(formattedDate);
                     return InkWell(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                          categorynm: sportNews[index].categoryName,
-                          categoryid: sportNews[index].categoryId,
-                          title: sportNews[index].title,
-                          en_title: sportNews[index].enTitle,
-                          news_image: sportNews[index].newsImage,
-                          banner_description: sportNews[index].bannerDescription,
-                          description: sportNews[index].description,
-                          slug: sportNews[index].slug,
-                          started_at: sportNews[index].startedAt,
-                          ended_at: sportNews[index].endedAt,
-                          status: "${sportNews[index].status}",
-                          author_id: "${sportNews[index].authorId}",
-                          author_image: sportNews[index].authorImage,
-                          name: sportNews[index].name,
-                          image: sportNews[index].authorImage,
+                          categoryNm: sportNews?[index].categoryName,
+                          categoryId: sportNews?[index].categoryId,
+                          title: sportNews?[index].title,
+                          en_title: sportNews?[index].enTitle,
+                          news_image: sportNews?[index].newsImage,
+                          banner_description: sportNews?[index].bannerDescription,
+                          description: sportNews?[index].description,
+                          slug: sportNews?[index].slug,
+                          started_at: sportNews?[index].startedAt,
+                          ended_at: sportNews?[index].endedAt,
+                          status: "${sportNews?[index].status}",
+                          author_id: "${sportNews?[index].authorId}",
+                          author_image: sportNews?[index].authorImage,
+                          name: sportNews?[index].name,
+                          image: sportNews?[index].authorImage,
                           tags: sportNewsSData[index].tags,
                         )));
                       },
@@ -107,7 +106,7 @@ class _SportNState extends State<SportN> {
                               width: MediaQuery.of(context).size.width / 1.2,
                               height: MediaQuery.of(context).size.height / 4.2,
                               child: CachedNetworkImage(
-                                imageUrl: sportNews[index].newsImage,
+                                imageUrl: sportNews![index].newsImage,
                                 imageBuilder: (context, imageProvider) => Container(
                                   width: MediaQuery.of(context).size.width / 1.15,
                                   height: MediaQuery.of(context).size.height / 4.2,
@@ -132,7 +131,7 @@ class _SportNState extends State<SportN> {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 5, 10, 0),
                                     child: Text(
-                                      sportNews[index].title ?? "",
+                                      sportNews?[index].title ?? "",
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(fontFamily: FontType.AnekGujaratiBold),),
@@ -181,10 +180,11 @@ class _SportNState extends State<SportN> {
 
     }
   }
-  Future<GeneralNewsModel> sportNewsOBJ;
+
+  Future<GeneralNewsModel?>? sportNewsOBJ;
   List<GNews> sportNewsSData = [];
   List<GData> sportNewsMData = [];
-  List<GNews> sportNews;
+  List<GNews>? sportNews;
 
   getSportNews(cateId,offset) async {
     setState(() {
@@ -192,8 +192,8 @@ class _SportNState extends State<SportN> {
     });
     try {
       sportNewsOBJ = ApiFuture().categoryWiseNews(ApiUrl.AllNews,cateId,offset);
-      await sportNewsOBJ.then((value) async {
-        sportNewsSData.addAll(value.data.news);
+      await sportNewsOBJ!.then((value) async {
+        sportNewsSData.addAll(value!.data.news);
         sportNewsMData.add(value.data);
       });
       setState(() {

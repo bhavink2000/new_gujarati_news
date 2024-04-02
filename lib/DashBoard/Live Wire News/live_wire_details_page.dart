@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,14 +13,14 @@ import '../app_bar_view.dart';
 
 class LiveWireDetails extends StatefulWidget {
   var id;
-  LiveWireDetails({Key key,this.id}) : super(key: key);
+  LiveWireDetails({Key? key,this.id}) : super(key: key);
 
   @override
   State<LiveWireDetails> createState() => _LiveWireDetailsState();
 }
 
 class _LiveWireDetailsState extends State<LiveWireDetails> {
-  bool isLoading;
+  bool? isLoading;
   @override
   void initState() {
     super.initState();
@@ -91,7 +90,7 @@ class _LiveWireDetailsState extends State<LiveWireDetails> {
       ),
     );
   }
-  Future<LiveWireDetailsModel> liveWireDObj;
+  Future<LiveWireDetailsModel?>? liveWireDObj;
   List<LiveWireData> liveWireDetails = [];
   getLiveWireDetails(var id) async {
     setState(() {
@@ -99,8 +98,8 @@ class _LiveWireDetailsState extends State<LiveWireDetails> {
     });
     try {
       liveWireDObj = ApiFuture().liveWireDetails(ApiUrl.LiveWireDetails,id);
-      await liveWireDObj.then((value) async {
-        liveWireDetails.addAll(value.data);
+      await liveWireDObj?.then((value) async {
+        liveWireDetails.addAll(value!.data);
       });
       setState(() {
         isLoading = false;

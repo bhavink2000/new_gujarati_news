@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +13,14 @@ import '../news_details_page.dart';
 
 
 class WorldN extends StatefulWidget {
-  const WorldN({Key key}) : super(key: key);
+  const WorldN({Key? key}) : super(key: key);
 
   @override
   State<WorldN> createState() => _WorldNState();
 }
 
 class _WorldNState extends State<WorldN> {
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -70,31 +69,31 @@ class _WorldNState extends State<WorldN> {
               child: isLoading == false ? ListView.builder(
                 scrollDirection: Axis.horizontal,
                 controller: scrollController,
-                itemCount: isLoadingMore == false ? worldNews.length + 1 : worldNews.length,
+                itemCount: isLoadingMore == false ? worldNews!.length + 1 : worldNews!.length,
                 itemBuilder: (context, index){
-                  if(index < worldNews.length){
+                  if(index < worldNews!.length){
                     DateFormat format = DateFormat("yyyy-MM-dd HH:mm:ss");
-                    var formattedDate = format.parse(worldNews[index].startedAt.toString());
+                    var formattedDate = format.parse(worldNews![index].startedAt.toString());
                     var mDate = DateFormat.yMMMd().format(formattedDate);
                     var time = DateFormat.jm().format(formattedDate);
                     return InkWell(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                          categorynm: worldNews[index].categoryName,
-                          categoryid: worldNews[index].categoryId,
-                          title: worldNews[index].title,
-                          en_title: worldNews[index].enTitle,
-                          news_image: worldNews[index].newsImage,
-                          banner_description: worldNews[index].bannerDescription,
-                          description: worldNews[index].description,
-                          slug: worldNews[index].slug,
-                          started_at: worldNews[index].startedAt,
-                          ended_at: worldNews[index].endedAt,
-                          status: "${worldNews[index].status}",
-                          author_id: "${worldNews[index].authorId}",
-                          author_image: worldNews[index].authorImage,
-                          name: worldNews[index].name,
-                          image: worldNews[index].authorImage,
+                          categoryNm: worldNews?[index].categoryName,
+                          categoryId: worldNews?[index].categoryId,
+                          title: worldNews?[index].title,
+                          en_title: worldNews?[index].enTitle,
+                          news_image: worldNews?[index].newsImage,
+                          banner_description: worldNews?[index].bannerDescription,
+                          description: worldNews?[index].description,
+                          slug: worldNews?[index].slug,
+                          started_at: worldNews?[index].startedAt,
+                          ended_at: worldNews?[index].endedAt,
+                          status: "${worldNews?[index].status}",
+                          author_id: "${worldNews?[index].authorId}",
+                          author_image: worldNews?[index].authorImage,
+                          name: worldNews?[index].name,
+                          image: worldNews?[index].authorImage,
                           tags: worldNewsSData[index].tags,
                         )));
                       },
@@ -104,7 +103,7 @@ class _WorldNState extends State<WorldN> {
                           width: MediaQuery.of(context).size.width / 1.2,
                           height: MediaQuery.of(context).size.height / 2.31,
                           child: CachedNetworkImage(
-                            imageUrl: worldNews[index].newsImage,
+                            imageUrl: worldNews![index].newsImage,
                             imageBuilder: (context, imageProvider) => Container(
                               width: MediaQuery.of(context).size.width / 1.2,
                               height: MediaQuery.of(context).size.height / 2.32,
@@ -136,7 +135,7 @@ class _WorldNState extends State<WorldN> {
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
                                       child: Text(
-                                        worldNews[index].title ?? "",
+                                        worldNews?[index].title ?? "",
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(fontFamily: FontType.AnekGujaratiSemiBold,color: Colors.white),),
@@ -187,18 +186,18 @@ class _WorldNState extends State<WorldN> {
       print("don't call");
     }
   }
-  Future<GeneralNewsModel> worldNewsOBJ;
+  Future<GeneralNewsModel?>? worldNewsOBJ;
   List<GNews> worldNewsSData = [];
   List<GData> worldNewsMData = [];
-  List<GNews> worldNews;
+  List<GNews>? worldNews;
   getWorldNews(cateId,offset) async {
     setState(() {
       isLoading = true;
     });
     try {
       worldNewsOBJ = ApiFuture().categoryWiseNews(ApiUrl.AllNews,cateId,offset);
-      await worldNewsOBJ.then((value) async {
-        worldNewsSData.addAll(value.data.news);
+      await worldNewsOBJ!.then((value) async {
+        worldNewsSData.addAll(value!.data.news);
         worldNewsMData.add(value.data);
       });
       setState(() {

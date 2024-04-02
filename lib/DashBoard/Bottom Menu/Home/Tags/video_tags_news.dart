@@ -1,4 +1,3 @@
-//@dart=2.9
 // ignore_for_file: must_be_immutable
 
 import 'dart:io';
@@ -20,14 +19,14 @@ import '../Home Video News/home_video_news_details.dart';
 
 class VideoTagNews extends StatefulWidget {
   var tagid,tagnm;
-  VideoTagNews({Key key,this.tagid,this.tagnm}) : super(key: key);
+  VideoTagNews({Key? key,this.tagid,this.tagnm}) : super(key: key);
 
   @override
   State<VideoTagNews> createState() => _VideoTagNewsState();
 }
 
 class _VideoTagNewsState extends State<VideoTagNews> {
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -72,6 +71,8 @@ class _VideoTagNewsState extends State<VideoTagNews> {
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVideoNewsDetails(
                               vnews: allVideoSData[index],
                               vtags: allVideoSData[index].tags,
+                              title: allVideoSData[index].title,
+                              videoUrls: allVideoSData[index].videoUrls,
                             )));
                           },
                           child: FadeInAnimation(
@@ -191,7 +192,7 @@ class _VideoTagNewsState extends State<VideoTagNews> {
     }
   }
 
-  Future<VideoNewsModel> allVideoOBJ;
+  Future<VideoNewsModel?>? allVideoOBJ;
   List<VNews> allVideoSData = [];
   List<VData> allVideoMData = [];
 
@@ -201,8 +202,8 @@ class _VideoTagNewsState extends State<VideoTagNews> {
     });
     try {
       allVideoOBJ = ApiFuture().tagVideoNews(ApiUrl.AllVideo,widget.tagid,offset);
-      await allVideoOBJ.then((value) async {
-        allVideoSData.addAll(value.data.news);
+      await allVideoOBJ!.then((value) async {
+        allVideoSData.addAll(value!.data.news);
         allVideoMData.add(value.data);
       });
       setState(() {});

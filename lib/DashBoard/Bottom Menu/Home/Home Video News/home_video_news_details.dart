@@ -1,9 +1,9 @@
-//@dart=2.9
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
 import 'package:new_gujarati_news/DashBoard/Bottom%20Menu/Home/Tags/video_tags_news.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../App Helper/Model/video_news_model.dart';
 import '../../../../App Helper/Service/share_data.dart';
@@ -14,12 +14,12 @@ import '../../../../main.dart';
 import '../../../app_bar_view.dart';
 
 class HomeVideoNewsDetails extends StatefulWidget {
-  var vnews;
+  var vnews,title,videoUrls;
   List<VTag> vtags;
-  VideoPlayerController videoPlayerController;
+  VideoPlayerController? videoPlayerController;
   HomeVideoNewsDetails({
-    Key key,this.vnews,
-    this.vtags
+    Key? key,this.vnews,
+    required this.vtags,this.title,this.videoUrls
   }) : super(key: key);
 
   @override
@@ -27,15 +27,15 @@ class HomeVideoNewsDetails extends StatefulWidget {
 }
 
 class _HomeVideoNewsDetailsState extends State<HomeVideoNewsDetails> {
-  VideoPlayerController _Controller;
-  ChewieController _chewieController;
+  VideoPlayerController? _Controller;
+  ChewieController? _chewieController;
   bool _isPlaying = false;
-  bool isLoading;
+  bool? isLoading;
   @override
   void initState() {
     _Controller =  VideoPlayerController.network(widget.vnews.videoUrls)
       ..addListener(() {
-        final bool isPlaying = _Controller.value.isPlaying;
+        final bool isPlaying = _Controller!.value.isPlaying;
         if(isPlaying != _isPlaying){
           setState(() {
             _isPlaying = isPlaying;
@@ -47,7 +47,7 @@ class _HomeVideoNewsDetailsState extends State<HomeVideoNewsDetails> {
         });
       });
     _chewieController = ChewieController(
-      videoPlayerController: _Controller,
+      videoPlayerController: _Controller!,
       autoPlay: true,
       looping: true,
     );
@@ -55,10 +55,9 @@ class _HomeVideoNewsDetailsState extends State<HomeVideoNewsDetails> {
   }
   @override
   void dispose() {
-    print("call dispose method of HomeVideoNewsDetails");
-    _Controller.dispose();
-    _chewieController.dispose();
-    widget.videoPlayerController.dispose();
+    _Controller!.dispose();
+    _chewieController!.dispose();
+    widget.videoPlayerController!.dispose();
     super.dispose();
   }
   @override
@@ -82,8 +81,8 @@ class _HomeVideoNewsDetailsState extends State<HomeVideoNewsDetails> {
                     child: widget.vnews.videoUrls != null ? Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height / 3.8,
-                      child: _Controller.value.isInitialized
-                          ? Chewie(controller: _chewieController)
+                      child: _Controller!.value.isInitialized
+                          ? Chewie(controller: _chewieController!)
                           : const Center(child: CircularProgressIndicator(color: Colors.red)),
                     ) : const ImageMainErrorHelper(),
                   ),
@@ -124,35 +123,72 @@ class _HomeVideoNewsDetailsState extends State<HomeVideoNewsDetails> {
                               children: [
                                 InkWell(
                                     onTap: (){
-                                      ShareData().share(SocialMedia.linkedin, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                                      launch('https://www.linkedin.com/shareArticle?mini=true&url=${Uri.encodeFull(widget.videoUrls)}&title=${Uri.encodeFull(widget.title)}');
+                                      //ShareData().share(SocialMedia.linkedin, widget.title ?? "", widget.newsLink ?? "");
                                     },
                                     child: Image(image: AppImageIcons().IndeedImageIcon,width: 30)
                                 ),
                                 InkWell(
                                     onTap: (){
-                                      ShareData().share(SocialMedia.facebook, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                                      launch('https://www.facebook.com/sharer/sharer.php?u=${Uri.encodeFull(widget.videoUrls!)}&quote=${Uri.encodeFull(widget.title!)}');
+                                      //ShareData().share(SocialMedia.facebook, widget.title ?? "", widget.newsLink ?? "");
                                     },
                                     child: Image(image: AppImageIcons().FacebookImageIcon,width: 30)
                                 ),
                                 InkWell(
                                     onTap: (){
-                                      ShareData().share(SocialMedia.twitter, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                                      launch('https://twitter.com/intent/tweet?text=${widget.title} ${Uri.encodeFull(widget.videoUrls)}');
+                                      //ShareData().share(SocialMedia.twitter, widget.title ?? "", widget.newsLink ?? "");
                                     },
                                     child: Image(image: AppImageIcons().TwitterImageIcon,width: 30)
                                 ),
                                 InkWell(
                                     onTap: (){
-                                      ShareData().share(SocialMedia.telegram, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                                      launch('https://telegram.me/share/url?text=${widget.title} ${Uri.encodeFull(widget.videoUrls)}');
+                                      //ShareData().share(SocialMedia.telegram, widget.title ?? "", widget.newsLink ?? "");
                                     },
                                     child: Image(image: AppImageIcons().ShareIcon,width: 30)
                                 ),
                                 InkWell(
                                     onTap: (){
-                                      ShareData().share(SocialMedia.whatsapp, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                                      launch("https://api.whatsapp.com/send?text=${widget.title} ${Uri.encodeFull(widget.videoUrls)}");
+                                      //ShareData().share(SocialMedia.whatsapp, widget.title ?? "", widget.newsLink ?? "");
                                     },
                                     child: Image(image: AppImageIcons().WhatsappImageIcon,width: 30)
                                 ),
                               ],
+                              // [
+                              //   InkWell(
+                              //       onTap: (){
+                              //         ShareData().share(SocialMedia.linkedin, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                              //       },
+                              //       child: Image(image: AppImageIcons().IndeedImageIcon,width: 30)
+                              //   ),
+                              //   InkWell(
+                              //       onTap: (){
+                              //         ShareData().share(SocialMedia.facebook, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                              //       },
+                              //       child: Image(image: AppImageIcons().FacebookImageIcon,width: 30)
+                              //   ),
+                              //   InkWell(
+                              //       onTap: (){
+                              //         ShareData().share(SocialMedia.twitter, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                              //       },
+                              //       child: Image(image: AppImageIcons().TwitterImageIcon,width: 30)
+                              //   ),
+                              //   InkWell(
+                              //       onTap: (){
+                              //         ShareData().share(SocialMedia.telegram, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                              //       },
+                              //       child: Image(image: AppImageIcons().ShareIcon,width: 30)
+                              //   ),
+                              //   InkWell(
+                              //       onTap: (){
+                              //         ShareData().share(SocialMedia.whatsapp, widget.vnews.title ?? "", widget.vnews.videoUrls ?? "");
+                              //       },
+                              //       child: Image(image: AppImageIcons().WhatsappImageIcon,width: 30)
+                              //   ),
+                              // ],
                             ),
                           ),
                         ],
@@ -195,7 +231,6 @@ class _HomeVideoNewsDetailsState extends State<HomeVideoNewsDetails> {
                                     padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                                     child: InkWell(
                                         onTap: (){
-                                          print(vtag.id);
                                           Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoTagNews(
                                             tagid: vtag.id,
                                             tagnm: vtag.name,

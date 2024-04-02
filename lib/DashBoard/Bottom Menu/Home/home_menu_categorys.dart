@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'package:flutter/material.dart';
 
 import 'Home Category News/all_news.dart';
@@ -9,7 +8,7 @@ import 'Home Category News/world.dart';
 import 'Home Video News/home_video_view.dart';
 
 class HomeMenuCategory extends StatelessWidget {
-  const HomeMenuCategory({Key key}) : super(key: key);
+  const HomeMenuCategory({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,8 @@
-//@dart=2.9
 import 'package:flutter/material.dart';
 import 'color_and_font_helper.dart';
 
 class ViewMore extends StatelessWidget {
-  const ViewMore({Key key}) : super(key: key);
+  const ViewMore({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

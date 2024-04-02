@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +14,14 @@ import '../../Bottom Menu/Home/news_details_page.dart';
 import '../drawer_menus.dart';
 
 class ExclusiveNews extends StatefulWidget {
-  const ExclusiveNews({Key key}) : super(key: key);
+  const ExclusiveNews({Key? key}) : super(key: key);
 
   @override
   State<ExclusiveNews> createState() => _ExclusiveNewsState();
 }
 
 class _ExclusiveNewsState extends State<ExclusiveNews> {
-  bool isLoading;
+  bool? isLoading;
   int offset = 0;
   @override
   void initState() {
@@ -51,8 +50,8 @@ class _ExclusiveNewsState extends State<ExclusiveNews> {
               child: InkWell(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                    categorynm: eNewsSData[index].categoryName,
-                    categoryid: eNewsSData[index].categoryId,
+                    categoryNm: eNewsSData[index].categoryName,
+                    categoryId: eNewsSData[index].categoryId,
                     title: eNewsSData[index].title,
                     en_title: eNewsSData[index].enTitle,
                     news_image: eNewsSData[index].newsImage,
@@ -124,18 +123,17 @@ class _ExclusiveNewsState extends State<ExclusiveNews> {
       ),
     );
   }
-  Future<GeneralNewsModel> eNewsOBJ;
+  Future<GeneralNewsModel?>? eNewsOBJ;
   List<GNews> eNewsSData = [];
   List<GData> eNewsMData = [];
-  List<GNews> eNews;
   getENews(var offset) async {
     setState(() {
       isLoading = true;
     });
     try {
       eNewsOBJ = ApiFuture().eNews(ApiUrl.AllNews,offset);
-      await eNewsOBJ.then((value) async {
-        eNewsSData.addAll(value.data.news);
+      await eNewsOBJ!.then((value) async {
+        eNewsSData.addAll(value!.data.news);
         eNewsMData.add(value.data);
       });
       setState(() {

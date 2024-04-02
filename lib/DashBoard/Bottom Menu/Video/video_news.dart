@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -14,7 +13,7 @@ import 'video_bottom_side.dart';
 import 'video_side.dart';
 
 class VideoMenu extends StatefulWidget {
-  const VideoMenu({Key key}) : super(key: key);
+  const VideoMenu({Key? key}) : super(key: key);
 
   @override
   State<VideoMenu> createState() => _VideoMenuState();
@@ -23,7 +22,7 @@ class VideoMenu extends StatefulWidget {
 class _VideoMenuState extends State<VideoMenu> {
 
   //PageController pageController = PageController(initialPage: 0);
-  bool isLoading;
+  bool? isLoading;
   final controller = PageController();
   var isLoadingMore = false;
   var offset = 0;
@@ -44,110 +43,49 @@ class _VideoMenuState extends State<VideoMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: ()async{
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-              return BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                child: AlertDialog(
-                  contentPadding: EdgeInsets.all(1),
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
-                  content: Container(
-                    height: MediaQuery.of(context).size.height / 3.8,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        SizedBox(height: 5),
-                        CircleAvatar(
-                          maxRadius: 40.0,
-                          backgroundColor: Colors.white,
-                          child: Image.asset("Assets/images/sitelogo.png",width: 120),
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: Colors.black,
+            child: Stack(
+              children: [
+                PageView.builder(
+                  scrollDirection: Axis.vertical,
+                  controller: controller,
+                  itemCount: isLoadingMore == false ? videoNews.length + 1 : videoNews.length,
+                  itemBuilder: (context, index){
+                    if(index < videoNews.length){
+                      return VideoWidget(
+                        url: videoNews[index].videoUrls,
+                        play: true,
+                        vNews: videoNews[index],
+                        vTags: videoNews[index].tags,
+                      );
+                    }
+                    else{
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: RedColor,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(8, 5, 8, 0),
-                          child: Text(
-                            "Do you really want to close the App?",
-                            style: TextStyle(fontFamily: FontType.AnekGujaratiSemiBold,letterSpacing: 0.5,fontSize: 12,),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            TextButton(
-                              child: Text("Stay",style: TextStyle(fontFamily: FontType.AnekGujaratiSemiBold,letterSpacing: 2,fontSize: 15,color: PurpleColor),),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                            TextButton(
-                              child: Text("Close",style: TextStyle(fontFamily: FontType.AnekGujaratiSemiBold,letterSpacing: 2,fontSize: 15,color: PurpleColor),),
-                              onPressed: (){
-                                exit(0);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                      );
+                    }
+                  },
                 ),
-              );
-            }
-        );
-        return true;
-      },
-      child: Scaffold(
-        body: SafeArea(
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              color: Colors.black,
-              child: Stack(
-                children: [
-                  PageView.builder(
-                    scrollDirection: Axis.vertical,
-                    controller: controller,
-                    itemCount: isLoadingMore == false ? videoNews.length + 1 : videoNews.length,
-                    itemBuilder: (context, index){
-                      if(index < videoNews.length){
-                        return VideoWidget(
-                          url: videoNews[index].videoUrls,
-                          play: true,
-                          vNews: videoNews[index],
-                          vTags: videoNews[index].tags,
-                        );
-                      }
-                      else{
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: RedColor,
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                    child: Image(image: AssetImage("Assets/images/sitelogo.png"),width: 100),
-                  ),
-                ],
-              )
-          ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  child: Image(image: AssetImage("Assets/images/sitelogo.png"),width: 100),
+                ),
+              ],
+            )
         ),
       ),
     );
   }
 
   Future<void> _scrollListener() async {
-    print("calling scrollLister");
-    if (controller.page == controller.page.toInt() && !isLoadingMore) {
-      print("call");
+    if (controller.page == controller.page!.toInt() && !isLoadingMore) {
       setState(() {
         isLoadingMore = true;
       });
@@ -163,7 +101,7 @@ class _VideoMenuState extends State<VideoMenu> {
     }
   }
 
-  Future<VideoNewsModel> videoNewsObj;
+  Future<VideoNewsModel?>? videoNewsObj;
   List<VNews> videoNews = [];
   List<VData> videoData = [];
 
@@ -173,8 +111,8 @@ class _VideoMenuState extends State<VideoMenu> {
     });
     try {
       videoNewsObj = ApiFuture().videoNews(ApiUrl.AllVideo,offset);
-      await videoNewsObj.then((value) async {
-        videoNews.addAll(value.data.news);
+      await videoNewsObj!.then((value) async {
+        videoNews.addAll(value!.data.news);
         videoData.add(value.data);
       });
       setState(() {
@@ -200,9 +138,9 @@ class VideoWidget extends StatefulWidget {
   final bool play;
   final String url;
 
-  var vNews;
+  var vNews,title,videoUrl;
   List<VTag> vTags;
-  VideoWidget({Key key, @required this.url, @required this.play,this.vNews,this.vTags}) : super(key: key);
+  VideoWidget({Key? key, required this.url, required this.play,this.vNews,required this.vTags,this.title,this.videoUrl}) : super(key: key);
 
   @override
   _VideoWidgetState createState() => _VideoWidgetState();
@@ -210,23 +148,23 @@ class VideoWidget extends StatefulWidget {
 
 
 class _VideoWidgetState extends State<VideoWidget> {
-  VideoPlayerController videoPlayerController ;
-  Future<void> _initializeVideoPlayerFuture;
-  bool isLoading;
+  VideoPlayerController? videoPlayerController ;
+  late Future<void> _initializeVideoPlayerFuture;
+  bool? isLoading;
   @override
   void initState() {
     super.initState();
     videoPlayerController = VideoPlayerController.network(widget.url);
-    _initializeVideoPlayerFuture = videoPlayerController.initialize().then((_) {
-      videoPlayerController.play();
-      videoPlayerController.setLooping(true);
+    _initializeVideoPlayerFuture = videoPlayerController!.initialize().then((_) {
+      videoPlayerController!.play();
+      videoPlayerController!.setLooping(true);
       setState(() {});
     });
   } // This closing tag was missing
 
   @override
   void dispose() {
-    videoPlayerController.dispose();
+    videoPlayerController!.dispose();
     super.dispose();
   }
 
@@ -234,16 +172,16 @@ class _VideoWidgetState extends State<VideoWidget> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        videoPlayerController.value.isInitialized ? Center(
+        videoPlayerController!.value.isInitialized ? Center(
           child: InkWell(
-            onTap: videoPlayerController.pause,
-            onDoubleTap: videoPlayerController.play,
+            onTap: videoPlayerController!.pause,
+            onDoubleTap: videoPlayerController!.play,
             child: Container(
               width: MediaQuery.of(context).size.width,
               //height: MediaQuery.of(context).size.height / videoPlayerController.value.aspectRatio,
               child: AspectRatio(
-                  aspectRatio: videoPlayerController.value.aspectRatio,
-                  child: VideoPlayer(videoPlayerController)
+                  aspectRatio: videoPlayerController!.value.aspectRatio,
+                  child: VideoPlayer(videoPlayerController!)
               ),
             ),
           ),
@@ -280,10 +218,12 @@ class _VideoWidgetState extends State<VideoWidget> {
             padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
             child: InkWell(
               onTap: (){
-                videoPlayerController.pause();
+                videoPlayerController!.pause();
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVideoNewsDetails(
                   vnews: widget.vNews,
                   vtags: widget.vNews.tags,
+                  title: widget.title,
+                  videoUrls: widget.videoUrl,
                 )));
               },
               child: Container(

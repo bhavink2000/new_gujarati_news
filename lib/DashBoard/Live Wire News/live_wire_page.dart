@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,14 +12,14 @@ import '../app_bar_view.dart';
 import 'live_wire_details_page.dart';
 
 class LiveWirePage extends StatefulWidget {
-  const LiveWirePage({Key key}) : super(key: key);
+  const LiveWirePage({Key? key}) : super(key: key);
 
   @override
   State<LiveWirePage> createState() => _LiveWirePageState();
 }
 
 class _LiveWirePageState extends State<LiveWirePage> {
-  bool isLoading;
+  bool? isLoading;
   @override
   void initState() {
     super.initState();
@@ -49,7 +48,6 @@ class _LiveWirePageState extends State<LiveWirePage> {
               children: [
                 InkWell(
                   onTap: (){
-                    print("LiveWireID -> ${liveWireMData[index].id}");
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>LiveWireDetails(
                       id: liveWireMData[index].id,
                     )));
@@ -72,7 +70,7 @@ class _LiveWirePageState extends State<LiveWirePage> {
     );
   }
 
-  Future<LiveWireNewsModel> liveWireObj;
+  Future<LiveWireNewsModel?>? liveWireObj;
   List<LiveData> liveWireMData = [];
   getLiveWire() async {
     setState(() {
@@ -80,8 +78,8 @@ class _LiveWirePageState extends State<LiveWirePage> {
     });
     try {
       liveWireObj = ApiFuture().liveWireNews(ApiUrl.AllLiveWire);
-      await liveWireObj.then((value) async {
-        liveWireMData.addAll(value.data);
+      await liveWireObj!.then((value) async {
+        liveWireMData.addAll(value!.data);
       });
       setState(() {
         isLoading = false;

@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +7,7 @@ import '../../../../../App Helper/Ui Helper/color_and_font_helper.dart';
 
 class HomeVideoBottom extends StatefulWidget {
   var title,desc,date;
-  HomeVideoBottom({Key key,this.title,this.desc,this.date}) : super(key: key);
+  HomeVideoBottom({Key? key,this.title,this.desc,this.date}) : super(key: key);
 
   @override
   State<HomeVideoBottom> createState() => _HomeVideoBottomState();

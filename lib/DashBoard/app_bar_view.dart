@@ -1,4 +1,3 @@
-//@dart=2.9
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
@@ -6,9 +5,10 @@ import '../App Helper/Service/notification_service.dart';
 import '../App Helper/Ui Helper/image_helper.dart';
 import 'Live Wire News/live_wire_page.dart';
 
-class AppBarHomePage extends StatelessWidget with PreferredSizeWidget{
+class AppBarHomePage extends StatelessWidget implements PreferredSizeWidget{
   var cindex;
-  AppBarHomePage({ Key key,this.cindex}) : preferredSize = Size.fromHeight(cindex == 1 ? 0 :70), super(key: key);
+  AppBarHomePage({ Key? key,this.cindex}) : preferredSize = Size.fromHeight(cindex == 1 ? 0 :70), super(key: key);
+
   @override
   final Size preferredSize;
 
@@ -53,8 +53,8 @@ class AppBarHomePage extends StatelessWidget with PreferredSizeWidget{
   }
 }
 
-class AppBarDetailsPage extends StatefulWidget with PreferredSizeWidget{
-  AppBarDetailsPage({ Key key,}) : preferredSize = const Size.fromHeight(70), super(key: key);
+class AppBarDetailsPage extends StatefulWidget implements PreferredSizeWidget{
+  AppBarDetailsPage({ Key? key,}) : preferredSize = const Size.fromHeight(70), super(key: key);
   @override
   final Size preferredSize;
 

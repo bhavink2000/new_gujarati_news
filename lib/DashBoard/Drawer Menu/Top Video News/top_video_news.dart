@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +16,14 @@ import '../drawer_menus.dart';
 import 'top_video_news_details.dart';
 
 class TopVideoNews extends StatefulWidget {
-  const TopVideoNews({Key key}) : super(key: key);
+  const TopVideoNews({Key? key}) : super(key: key);
 
   @override
   State<TopVideoNews> createState() => _TopVideoNewsState();
 }
 
 class _TopVideoNewsState extends State<TopVideoNews> {
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -87,7 +86,6 @@ class _TopVideoNewsState extends State<TopVideoNews> {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                                 child: InkWell(
                                   onTap: (){
-                                    print("vindex->${index}");
                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVideoFirst(
                                       vNews: videoNews,
                                       vindex: index,
@@ -195,6 +193,7 @@ class _TopVideoNewsState extends State<TopVideoNews> {
       ),
     );
   }
+  
   Future<void> _scrollListner()async{
     if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
       setState((){
@@ -210,7 +209,7 @@ class _TopVideoNewsState extends State<TopVideoNews> {
       //print("don't call");
     }
   }
-  Future<VideoNewsModel> videoObj;
+  Future<VideoNewsModel?>? videoObj;
   List<VNews> videoNews = [];
   List<VData> videoData = [];
 
@@ -220,8 +219,8 @@ class _TopVideoNewsState extends State<TopVideoNews> {
     });
     try {
       videoObj = ApiFuture().videoNews(ApiUrl.AllVideo,offset);
-      await videoObj.then((value) async {
-        videoNews.addAll(value.data.news);
+      await videoObj!.then((value) async {
+        videoNews.addAll(value!.data.news);
         videoData.add(value.data);
       });
       setState(() {});

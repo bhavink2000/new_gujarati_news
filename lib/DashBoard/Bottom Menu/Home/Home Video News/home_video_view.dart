@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +11,14 @@ import '../../../../App Helper/Ui Helper/loading_helper.dart';
 import 'home_video_first_view.dart';
 
 class HomeVideoNews extends StatefulWidget {
-  const HomeVideoNews({Key key}) : super(key: key);
+  const HomeVideoNews({Key? key}) : super(key: key);
 
   @override
   State<HomeVideoNews> createState() => _HomeVideoNewsState();
 }
 
 class _HomeVideoNewsState extends State<HomeVideoNews> {
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -71,7 +70,6 @@ class _HomeVideoNewsState extends State<HomeVideoNews> {
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
                       child: InkWell(
                         onTap: (){
-                          print("vindex->${index}");
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVideoFirst(
                             vNews: allVideoSData,
                             vindex: index,
@@ -85,13 +83,13 @@ class _HomeVideoNewsState extends State<HomeVideoNews> {
                             height: MediaQuery.of(context).size.height / 3.3,
                             child: CachedNetworkImage(
                               imageUrl: allVideoSData[index].imageUrl,
-                              imageBuilder: (context, imageprovider) => Container(
+                              imageBuilder: (context, imageProvider) => Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height / 4.8,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
-                                    image: imageprovider,
+                                    image: imageProvider,
                                     fit: BoxFit.cover,
                                     //colorFilter: const ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)
                                   ),
@@ -166,7 +164,7 @@ class _HomeVideoNewsState extends State<HomeVideoNews> {
     }
   }
 
-  Future<VideoNewsModel> allVideoOBJ;
+  Future<VideoNewsModel?>? allVideoOBJ;
   List<VNews> allVideoSData = [];
   List<VData> allVideoMData = [];
   getVideo(offset) async {
@@ -175,8 +173,8 @@ class _HomeVideoNewsState extends State<HomeVideoNews> {
     });
     try {
       allVideoOBJ = ApiFuture().videoNews(ApiUrl.AllVideo,offset);
-      await allVideoOBJ.then((value) async {
-        allVideoSData.addAll(value.data.news);
+      await allVideoOBJ!.then((value) async {
+        allVideoSData.addAll(value!.data.news);
         allVideoMData.add(value.data);
       });
       setState(() {

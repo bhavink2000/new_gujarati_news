@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'package:flutter/material.dart';
 import 'package:new_gujarati_news/DashBoard/app_bar_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,7 +6,7 @@ import '../../../App Helper/Ui Helper/color_and_font_helper.dart';
 import '../drawer_menus.dart';
 
 class ContactUs extends StatefulWidget {
-  const ContactUs({Key key}) : super(key: key);
+  const ContactUs({Key? key}) : super(key: key);
 
   @override
   State<ContactUs> createState() => _ContactUsState();

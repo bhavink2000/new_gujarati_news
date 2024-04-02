@@ -1,5 +1,3 @@
-//@dart=2.9
-// ignore_for_file: import_of_legacy_library_into_null_safe, missing_return
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -12,7 +10,7 @@ import 'Drawer Menu/drawer_menus.dart';
 import 'app_bar_view.dart';
 
 class DashboardView extends StatefulWidget {
-  const DashboardView({Key key}) : super(key: key);
+  const DashboardView({Key? key}) : super(key: key);
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
@@ -20,21 +18,21 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
 
-  SharedPreferences loginData;
-  String deviceId;
+  SharedPreferences? loginData;
+  String? deviceId;
 
   @override
   void initState() {
-    intll();
     super.initState();
+    intll();
+
   }
   void intll() async {
     loginData = await SharedPreferences.getInstance();
-    loginData.setBool('login', false);
+    loginData?.setBool('login', false);
     setState(() {
-      deviceId = loginData.getString('device_id');
+      deviceId = loginData?.getString('device_id');
     });
-    print("deviceID ==> $deviceId");
   }
 
   int _currentIndex = 0;
@@ -63,7 +61,7 @@ class _DashboardViewState extends State<DashboardView> {
                   contentPadding: EdgeInsets.all(1),
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
                   content: Container(
-                    height: MediaQuery.of(context).size.height / 3.8,
+                    //height: MediaQuery.of(context).size.height / 3.8,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
@@ -100,6 +98,7 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 5)
                       ],
                     ),
                   ),

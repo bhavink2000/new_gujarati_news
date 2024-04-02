@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import '../news_details_page.dart';
 class TopHeaderNewsView extends StatefulWidget {
   List<GNews> allNews;
   bool isLoading;
-  TopHeaderNewsView({Key key,this.allNews,this.isLoading}) : super(key: key);
+  TopHeaderNewsView({Key? key,required this.allNews,required this.isLoading}) : super(key: key);
 
   @override
   State<TopHeaderNewsView> createState() => _TopHeaderNewsViewState();
@@ -22,8 +21,8 @@ class _TopHeaderNewsViewState extends State<TopHeaderNewsView> {
     return InkWell(
         onTap: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-            categorynm: widget.allNews[0].categoryName,
-            categoryid: widget.allNews[0].categoryId,
+            categoryNm: widget.allNews[0].categoryName,
+            categoryId: widget.allNews[0].categoryId,
             title: widget.allNews[0].title,
             en_title: widget.allNews[0].enTitle,
             news_image: widget.allNews[0].newsImage,

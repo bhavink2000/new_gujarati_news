@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,14 +14,14 @@ import '../news_details_page.dart';
 
 
 class EntertainmentN extends StatefulWidget {
-  const EntertainmentN({Key key}) : super(key: key);
+  const EntertainmentN({Key? key}) : super(key: key);
 
   @override
   State<EntertainmentN> createState() => _EntertainmentNState();
 }
 
 class _EntertainmentNState extends State<EntertainmentN> {
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -71,31 +70,31 @@ class _EntertainmentNState extends State<EntertainmentN> {
               child: isLoading == false ? ListView.builder(
                 scrollDirection: Axis.horizontal,
                 controller: scrollController,
-                itemCount: isLoadingMore == false ? entertainmentNews.length + 1 : entertainmentNews.length,
+                itemCount: isLoadingMore == false ? entertainmentNews!.length + 1 : entertainmentNews!.length,
                 itemBuilder: (context, index){
-                  if(index < entertainmentNews.length){
+                  if(index < entertainmentNews!.length){
                     DateFormat format = DateFormat("yyyy-MM-dd HH:mm:ss");
-                    var formattedDate = format.parse(entertainmentNews[index].startedAt.toString());
+                    var formattedDate = format.parse(entertainmentNews![index].startedAt.toString());
                     var mDate = DateFormat.yMMMd().format(formattedDate);
                     var time = DateFormat.jm().format(formattedDate);
                     return InkWell(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                          categorynm: entertainmentNews[index].categoryName,
-                          categoryid: entertainmentNews[index].categoryId,
-                          title: entertainmentNews[index].title,
-                          en_title: entertainmentNews[index].enTitle,
-                          news_image: entertainmentNews[index].newsImage,
-                          banner_description: entertainmentNews[index].bannerDescription,
-                          description: entertainmentNews[index].description,
-                          slug: entertainmentNews[index].slug,
-                          started_at: entertainmentNews[index].startedAt,
-                          ended_at: entertainmentNews[index].endedAt,
-                          status: "${entertainmentNews[index].status}",
-                          author_id: "${entertainmentNews[index].authorId}",
-                          author_image: entertainmentNews[index].authorImage,
-                          name: entertainmentNews[index].name,
-                          image: entertainmentNews[index].authorImage,
+                          categoryNm: entertainmentNews?[index].categoryName,
+                          categoryId: entertainmentNews?[index].categoryId,
+                          title: entertainmentNews?[index].title,
+                          en_title: entertainmentNews?[index].enTitle,
+                          news_image: entertainmentNews?[index].newsImage,
+                          banner_description: entertainmentNews?[index].bannerDescription,
+                          description: entertainmentNews?[index].description,
+                          slug: entertainmentNews?[index].slug,
+                          started_at: entertainmentNews?[index].startedAt,
+                          ended_at: entertainmentNews?[index].endedAt,
+                          status: "${entertainmentNews?[index].status}",
+                          author_id: "${entertainmentNews?[index].authorId}",
+                          author_image: entertainmentNews?[index].authorImage,
+                          name: entertainmentNews?[index].name,
+                          image: entertainmentNews?[index].authorImage,
                           tags: entertainmentNewsSData[index].tags,
                         )));
                       },
@@ -108,7 +107,7 @@ class _EntertainmentNState extends State<EntertainmentN> {
                               width: MediaQuery.of(context).size.width / 1.2,
                               height: MediaQuery.of(context).size.height / 4.2,
                               child: CachedNetworkImage(
-                                imageUrl: entertainmentNews[index].newsImage,
+                                imageUrl: entertainmentNews![index].newsImage,
                                 imageBuilder: (context, imageProvider) => Container(
                                   width: MediaQuery.of(context).size.width / 1.15,
                                   height: MediaQuery.of(context).size.height / 4.2,
@@ -133,7 +132,7 @@ class _EntertainmentNState extends State<EntertainmentN> {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 5, 10, 0),
                                     child: Text(
-                                      entertainmentNews[index].title ?? "",
+                                      entertainmentNews?[index].title ?? "",
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(fontFamily: FontType.AnekGujaratiSemiBold),),
@@ -182,10 +181,10 @@ class _EntertainmentNState extends State<EntertainmentN> {
     }
   }
 
-  Future<GeneralNewsModel> entertainmentNewsOBJ;
+  Future<GeneralNewsModel?>? entertainmentNewsOBJ;
   List<GNews> entertainmentNewsSData = [];
   List<GData> entertainmentNewsMData = [];
-  List<GNews> entertainmentNews;
+  List<GNews>? entertainmentNews;
 
   getEntertainmentNews(cateId,offset) async {
     setState(() {
@@ -193,8 +192,8 @@ class _EntertainmentNState extends State<EntertainmentN> {
     });
     try {
       entertainmentNewsOBJ = ApiFuture().categoryWiseNews(ApiUrl.AllNews,cateId,offset);
-      await entertainmentNewsOBJ.then((value) async {
-        entertainmentNewsSData.addAll(value.data.news);
+      await entertainmentNewsOBJ!.then((value) async {
+        entertainmentNewsSData.addAll(value!.data.news);
         entertainmentNewsMData.add(value.data);
       });
       setState(() {

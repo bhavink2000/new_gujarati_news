@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../App Helper/Api Future/api_future.dart';
 import '../../App Helper/Api Urls/api_url.dart';
 import '../../App Helper/Model/categorys_model.dart';
 import '../../App Helper/Ui Helper/color_and_font_helper.dart';
@@ -20,14 +18,14 @@ import 'drawer_menus_details.dart';
 
 
 class DrawerMenus extends StatefulWidget {
-  const DrawerMenus({Key key}) : super(key: key);
+  const DrawerMenus({Key? key}) : super(key: key);
 
   @override
   State<DrawerMenus> createState() => _DrawerMenusState();
 }
 
 class _DrawerMenusState extends State<DrawerMenus> {
-  bool isLoading;
+  bool? isLoading;
   @override
   void initState() {
     super.initState();
@@ -142,7 +140,6 @@ class _DrawerMenusState extends State<DrawerMenus> {
                       padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
                       child: InkWell(
                         onTap: (){
-                          print("category nm=>${categoryData[index].id} / category id=>${categoryData[index].id}");
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>DrawerMenuDetails(
                             id: categoryData[index].id,
                             name: categoryData[index].name,
@@ -201,7 +198,7 @@ class _DrawerMenusState extends State<DrawerMenus> {
     );
   }
 
-  Future<CategoryModel> categoryOBJ;
+  Future<CategoryModel?>? categoryOBJ;
   List<CData> categoryData = [];
   getCategoryName() async {
     setState(() {
@@ -209,8 +206,8 @@ class _DrawerMenusState extends State<DrawerMenus> {
     });
     try {
       categoryOBJ = categoryName(ApiUrl.CategoryNameID);
-      await categoryOBJ.then((value) async {
-        categoryData.addAll(value.data);
+      await categoryOBJ?.then((value) async {
+        categoryData.addAll(value!.data as Iterable<CData>);
       });
       setState(() {
         isLoading = false;
@@ -233,12 +230,10 @@ class _DrawerMenusState extends State<DrawerMenus> {
     final cacheManager = DefaultCacheManager();
     final file = await cacheManager.getSingleFile(url);
     if (await file.exists()) {
-      print("Cached Response");
       final response = await file.readAsString();
       var data = jsonDecode(response);
       return CategoryModel.fromJson(data);
     } else {
-      print("Network Response");
       final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 30));
       var data = jsonDecode(response.body.toString());
       cacheManager.putFile(url, utf8.encode(response.body));
@@ -246,3 +241,6 @@ class _DrawerMenusState extends State<DrawerMenus> {
     }
   }
 }
+
+
+

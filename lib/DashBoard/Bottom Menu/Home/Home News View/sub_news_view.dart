@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../../../App Helper/Model/general_news_model.dart';
@@ -12,7 +11,7 @@ class SubNewsView extends StatelessWidget {
   List<GNews> allNews;
   bool isLoading;
   var index;
-  SubNewsView({Key key,this.allNews,this.isLoading,this.index}) : super(key: key);
+  SubNewsView({Key? key,required this.allNews,required this.isLoading,this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +29,8 @@ class SubNewsView extends StatelessWidget {
               child: InkWell(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                    categorynm: allNews[index].categoryName,
-                    categoryid: allNews[index].categoryId,
+                    categoryNm: allNews[index].categoryName,
+                    categoryId: allNews[index].categoryId,
                     title: allNews[index].title,
                     en_title: allNews[index].enTitle,
                     news_image: allNews[index].newsImage,
@@ -46,7 +45,7 @@ class SubNewsView extends StatelessWidget {
                     name: allNews[index].name,
                     image: allNews[index].authorImage,
                     tags: allNews[index].tags,
-                    newslink: allNews[index].newsLink,
+                    newsLink: allNews[index].newsLink,
                   )));
                 },
                 child: Container(
@@ -114,8 +113,8 @@ class SubNewsView extends StatelessWidget {
                     child: InkWell(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                          categorynm: allNews[index].categoryName,
-                          categoryid: allNews[index].categoryId,
+                          categoryNm: allNews[index].categoryName,
+                          categoryId: allNews[index].categoryId,
                           title: allNews[index].title,
                           en_title: allNews[index].enTitle,
                           news_image: allNews[index].newsImage,
@@ -130,7 +129,7 @@ class SubNewsView extends StatelessWidget {
                           name: allNews[index].name,
                           image: allNews[index].authorImage,
                           tags: allNews[index].tags,
-                          newslink: allNews[index].newsLink,
+                          newsLink: allNews[index].newsLink,
                         )));
                       },
                       child: Padding(

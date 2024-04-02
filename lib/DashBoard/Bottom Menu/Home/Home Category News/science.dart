@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,14 +14,14 @@ import '../news_details_page.dart';
 
 
 class ScienceN extends StatefulWidget {
-  const ScienceN({Key key}) : super(key: key);
+  const ScienceN({Key? key}) : super(key: key);
 
   @override
   State<ScienceN> createState() => _ScienceNState();
 }
 
 class _ScienceNState extends State<ScienceN> {
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -70,31 +69,31 @@ class _ScienceNState extends State<ScienceN> {
               child: isLoading == false ? ListView.builder(
                 scrollDirection: Axis.horizontal,
                 controller: scrollController,
-                itemCount: isLoadingMore == false ? scienceNews.length + 1 : scienceNews.length,
+                itemCount: isLoadingMore == false ? scienceNews!.length + 1 : scienceNews!.length,
                 itemBuilder: (context, index){
-                  if(index < scienceNews.length){
+                  if(index < scienceNews!.length){
                     DateFormat format = DateFormat("yyyy-MM-dd HH:mm:ss");
-                    var formattedDate = format.parse(scienceNews[index].startedAt.toString());
+                    var formattedDate = format.parse(scienceNews![index].startedAt.toString());
                     var mDate = DateFormat.yMMMd().format(formattedDate);
                     var time = DateFormat.jm().format(formattedDate);
                     return InkWell(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                          categorynm: scienceNews[index].categoryName,
-                          categoryid: scienceNews[index].categoryId,
-                          title: scienceNews[index].title,
-                          en_title: scienceNews[index].enTitle,
-                          news_image: scienceNews[index].newsImage,
-                          banner_description: scienceNews[index].bannerDescription,
-                          description: scienceNews[index].description,
-                          slug: scienceNews[index].slug,
-                          started_at: scienceNews[index].startedAt,
-                          ended_at: scienceNews[index].endedAt,
-                          status: "${scienceNews[index].status}",
-                          author_id: "${scienceNews[index].authorId}",
-                          author_image: scienceNews[index].authorImage,
-                          name: scienceNews[index].name,
-                          image: scienceNews[index].authorImage,
+                          categoryNm: scienceNews?[index].categoryName,
+                          categoryId: scienceNews?[index].categoryId,
+                          title: scienceNews?[index].title,
+                          en_title: scienceNews?[index].enTitle,
+                          news_image: scienceNews?[index].newsImage,
+                          banner_description: scienceNews?[index].bannerDescription,
+                          description: scienceNews?[index].description,
+                          slug: scienceNews?[index].slug,
+                          started_at: scienceNews?[index].startedAt,
+                          ended_at: scienceNews?[index].endedAt,
+                          status: "${scienceNews?[index].status}",
+                          author_id: "${scienceNews?[index].authorId}",
+                          author_image: scienceNews?[index].authorImage,
+                          name: scienceNews?[index].name,
+                          image: scienceNews?[index].authorImage,
                           tags: scienceNewsSData[index].tags,
                         )));
                       },
@@ -107,7 +106,7 @@ class _ScienceNState extends State<ScienceN> {
                               width: MediaQuery.of(context).size.width / 1.2,
                               height: MediaQuery.of(context).size.height / 4.2,
                               child: CachedNetworkImage(
-                                imageUrl: scienceNews[index].newsImage,
+                                imageUrl: scienceNews![index].newsImage,
                                 imageBuilder: (context, imageProvider) => Container(
                                   width: MediaQuery.of(context).size.width / 1.15,
                                   height: MediaQuery.of(context).size.height / 4.2,
@@ -132,7 +131,7 @@ class _ScienceNState extends State<ScienceN> {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 5, 10, 0),
                                     child: Text(
-                                      scienceNews[index].title ?? "",
+                                      scienceNews?[index].title ?? "",
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(fontFamily: FontType.AnekGujaratiSemiBold),),
@@ -180,18 +179,18 @@ class _ScienceNState extends State<ScienceN> {
     }
   }
 
-  Future<GeneralNewsModel> scienceNewsOBJ;
+  Future<GeneralNewsModel?>? scienceNewsOBJ;
   List<GNews> scienceNewsSData = [];
   List<GData> scienceNewsMData = [];
-  List<GNews> scienceNews;
+  List<GNews>? scienceNews;
   getScienceNews(cateId,offset) async {
     setState(() {
       isLoading = true;
     });
     try {
       scienceNewsOBJ = ApiFuture().categoryWiseNews(ApiUrl.AllNews,cateId,offset);
-      await scienceNewsOBJ.then((value) async {
-        scienceNewsSData.addAll(value.data.news);
+      await scienceNewsOBJ!.then((value) async {
+        scienceNewsSData.addAll(value!.data.news);
         scienceNewsMData.add(value.data);
       });
       setState(() {

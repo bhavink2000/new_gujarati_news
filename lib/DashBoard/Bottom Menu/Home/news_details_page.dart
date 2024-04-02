@@ -1,4 +1,3 @@
-//@dart=2.9
 // ignore_for_file: prefer_typing_uninitialized_variables, non_constant_identifier_names, must_be_immutable
 
 import 'dart:io';
@@ -8,6 +7,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:new_gujarati_news/App%20Helper/Ui%20Helper/data_helper.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../App Helper/Api Future/api_future.dart';
 import '../../../App Helper/Api Urls/api_url.dart';
 import '../../../App Helper/Model/general_news_model.dart';
@@ -21,17 +21,17 @@ import '../../app_bar_view.dart';
 import 'Tags/tags_news.dart';
 
 class NewsDetailsPage extends StatefulWidget {
-  var categorynm,categoryid,
+  var categoryNm,categoryId,
       title,en_title,news_image,banner_description,description,
       slug,started_at,ended_at,status,author_id,author_image,name,image,
-      newslink;
+      newsLink;
   List<GTag> tags;
   NewsDetailsPage({
-    Key key,this.categorynm,this.categoryid,
+    Key? key,this.categoryNm,this.categoryId,
     this.title,this.en_title,this.news_image,this.banner_description,this.description,
     this.slug,this.started_at,this.ended_at,this.status,this.author_id,this.author_image,this.name,this.image,
-    this.tags,
-    this.newslink
+    required this.tags,
+    this.newsLink
   }) : super(key: key);
 
   @override
@@ -40,14 +40,14 @@ class NewsDetailsPage extends StatefulWidget {
 
 class _NewsDetailsPageState extends State<NewsDetailsPage> {
 
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
   @override
   void initState() {
     super.initState();
-    getRelatedNews(widget.categoryid,offset);
+    getRelatedNews(widget.categoryId,offset);
     scrollController.addListener(_scrollListner);
     isLoading = true;
   }
@@ -127,31 +127,36 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                         children: [
                           InkWell(
                             onTap: (){
-                              ShareData().share(SocialMedia.linkedin, widget.title ?? "", widget.newslink ?? "");
+                              launch('https://www.linkedin.com/shareArticle?mini=true&url=${Uri.encodeFull(widget.newsLink)}&title=${Uri.encodeFull(widget.title)}');
+                              //ShareData().share(SocialMedia.linkedin, widget.title ?? "", widget.newsLink ?? "");
                             },
                             child: Image(image: AppImageIcons().IndeedImageIcon,width: 30)
                           ),
                           InkWell(
                             onTap: (){
-                              ShareData().share(SocialMedia.facebook, widget.title ?? "", widget.newslink ?? "");
+                              launch('https://www.facebook.com/sharer/sharer.php?u=${Uri.encodeFull(widget.newsLink!)}&quote=${Uri.encodeFull(widget.title!)}');
+                              //ShareData().share(SocialMedia.facebook, widget.title ?? "", widget.newsLink ?? "");
                             },
                             child: Image(image: AppImageIcons().FacebookImageIcon,width: 30)
                           ),
                           InkWell(
                             onTap: (){
-                              ShareData().share(SocialMedia.twitter, widget.title ?? "", widget.newslink ?? "");
+                              launch('https://twitter.com/intent/tweet?text=${widget.title} ${Uri.encodeFull(widget.newsLink)}');
+                              //ShareData().share(SocialMedia.twitter, widget.title ?? "", widget.newsLink ?? "");
                             },
                             child: Image(image: AppImageIcons().TwitterImageIcon,width: 30)
                           ),
                           InkWell(
                             onTap: (){
-                              ShareData().share(SocialMedia.telegram, widget.title ?? "", widget.newslink ?? "");
+                              launch('https://telegram.me/share/url?text=${widget.title} ${Uri.encodeFull(widget.newsLink)}');
+                              //ShareData().share(SocialMedia.telegram, widget.title ?? "", widget.newsLink ?? "");
                             },
                             child: Image(image: AppImageIcons().ShareIcon,width: 30)
                           ),
                           InkWell(
                             onTap: (){
-                              ShareData().share(SocialMedia.whatsapp, widget.title ?? "", widget.newslink ?? "");
+                              launch("https://api.whatsapp.com/send?text=${widget.title} ${Uri.encodeFull(widget.newsLink)}");
+                              //ShareData().share(SocialMedia.whatsapp, widget.title ?? "", widget.newsLink ?? "");
                             },
                             child: Image(image: AppImageIcons().WhatsappImageIcon,width: 30)
                           ),
@@ -209,7 +214,6 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                               padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                               child: InkWell(
                                   onTap: (){
-                                    print("tagid->${tag.id} / tagnm->${tag.name}");
                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>TagsNews(
                                       tagid: tag.id,
                                       tagnm: tag.name,
@@ -237,7 +241,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 6.5,
+              height: MediaQuery.of(context).size.height / 6,
               color: const Color(0xffD9D9D9),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +253,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height / 10,
+                      height: MediaQuery.of(context).size.height / 9,
                       width: MediaQuery.of(context).size.width,
                       child: isLoading == false ? relatedNewsSData.isNotEmpty ? ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -263,8 +267,8 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                               child: InkWell(
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                                    categorynm: relatedNewsSData[index].categoryName,
-                                    categoryid: relatedNewsSData[index].categoryId,
+                                    categoryNm: relatedNewsSData[index].categoryName,
+                                    categoryId: relatedNewsSData[index].categoryId,
                                     title: relatedNewsSData[index].title,
                                     en_title: relatedNewsSData[index].enTitle,
                                     news_image: relatedNewsSData[index].newsImage,
@@ -290,7 +294,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                                       Container(
                                         //color: Colors.yellow,
                                         width: MediaQuery.of(context).size.width / 2.8,
-                                        height: MediaQuery.of(context).size.height / 11,
+                                        height: MediaQuery.of(context).size.height / 9.5,
                                         child: relatedNewsSData[index].newsImage != null ? CachedNetworkImage(
                                           imageUrl: relatedNewsSData[index].newsImage,
                                           imageBuilder: (context, imageProvider) => Container(
@@ -352,7 +356,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
         isLoadingMore = true;
       });
       offset = offset + 1;
-      await getRelatedNews(widget.categoryid,offset);
+      await getRelatedNews(widget.categoryId,offset);
       setState((){
         isLoadingMore = false;
       });
@@ -362,7 +366,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
     }
   }
 
-  Future<GeneralNewsModel> relatedNewsOBJ;
+  Future<GeneralNewsModel?>? relatedNewsOBJ;
   List<GNews> relatedNewsSData = [];
   List<GData> relatedNewsMData = [];
 
@@ -372,8 +376,8 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
     });
     try {
       relatedNewsOBJ = ApiFuture().categoryWiseNews(ApiUrl.AllNews,cateId,offset);
-      await relatedNewsOBJ.then((value) async {
-        relatedNewsSData.addAll(value.data.news);
+      await relatedNewsOBJ!.then((value) async {
+        relatedNewsSData.addAll(value!.data.news);
         relatedNewsMData.add(value.data);
       });
       setState(() {

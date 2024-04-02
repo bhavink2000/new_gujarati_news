@@ -34,7 +34,7 @@ class ApiFuture{
       }).timeout(const Duration(seconds: 30));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print("All News--> $data");
+        print("tag News--> $data");
         return GeneralNewsModel.fromJson(data);
       } else {
         throw Exception("Failed to load data");
@@ -61,7 +61,7 @@ class ApiFuture{
   Future<CategoryModel?> categoryName(String url) async {
     final response = await http.get(Uri.parse(url),).timeout(const Duration(seconds: 30));
     var data = jsonDecode(response.body.toString());
-    print("Categorys-->$data");
+    print("Category-->$data");
     if (response.statusCode == 200) {
       return CategoryModel.fromJson(data);
     } else {
@@ -100,7 +100,7 @@ class ApiFuture{
       'tag_id': tagid.toString(),
     }).timeout(const Duration(seconds: 30));
     var data = jsonDecode(response.body.toString());
-    print("Video News-->$data");
+    print("tag Video News-->$data");
     if (response.statusCode == 200) {
       return VideoNewsModel.fromJson(data);
     } else {

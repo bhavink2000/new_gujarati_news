@@ -1,4 +1,3 @@
-//@dart=2.9
 // ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable
 
 import 'package:flutter/material.dart';
@@ -12,15 +11,15 @@ import 'home_video_news_details.dart';
 class HomeVideoFirst extends StatefulWidget {
   List<VNews> vNews;
   var vindex;
-  HomeVideoFirst({Key key,this.vNews,this.vindex}) : super(key: key);
+  HomeVideoFirst({Key? key,required this.vNews,this.vindex}) : super(key: key);
 
   @override
   State<HomeVideoFirst> createState() => _HomeVideoFirstState();
 }
 
 class _HomeVideoFirstState extends State<HomeVideoFirst> {
-  PageController controller;
-  VideoPlayerController videoPlayerController;
+  PageController? controller;
+  VideoPlayerController? videoPlayerController;
   @override
   void initState() {
     super.initState();
@@ -29,9 +28,8 @@ class _HomeVideoFirstState extends State<HomeVideoFirst> {
 
   @override
   void dispose() {
-    controller.dispose();
-    videoPlayerController.dispose().then((value){
-      print("call dispose method of HomeVideoFirst");
+    controller!.dispose();
+    videoPlayerController!.dispose().then((value){
     });
     super.dispose();
   }
@@ -54,6 +52,8 @@ class _HomeVideoFirstState extends State<HomeVideoFirst> {
                   play: true,
                   vNews: widget.vNews[index],
                   vTag: widget.vNews[index].tags,
+                  title: widget.vNews[index].title,
+                  videoUrl: widget.vNews[index].videoUrls,
                 );
               },
             )
@@ -66,31 +66,30 @@ class _HomeVideoFirstState extends State<HomeVideoFirst> {
 class HomeVideoWidget extends StatefulWidget {
   final bool play;
   final String url;
-  var vNews;
+  var vNews,title,videoUrl;
   List<VTag> vTag;
-  HomeVideoWidget({Key key,this.play,this.url,this.vNews,this.vTag}) : super(key: key);
+  HomeVideoWidget({Key? key,required this.play,required this.url,this.vNews,required this.vTag,this.title,this.videoUrl}) : super(key: key);
 
   @override
   State<HomeVideoWidget> createState() => _HomeVideoWidgetState();
 }
 
 class _HomeVideoWidgetState extends State<HomeVideoWidget> {
-  VideoPlayerController videoPlayerController;
-  Future<void> _initializeVideoPlayerFuture;
+  VideoPlayerController? videoPlayerController;
+  Future<void>? _initializeVideoPlayerFuture;
   @override
   void initState() {
     super.initState();
     videoPlayerController =  VideoPlayerController.network(widget.url);
-    _initializeVideoPlayerFuture = videoPlayerController.initialize().then((_) {
-      videoPlayerController.play();
-      videoPlayerController.setLooping(true);
+    _initializeVideoPlayerFuture = videoPlayerController?.initialize().then((_) {
+      videoPlayerController?.play();
+      videoPlayerController?.setLooping(true);
       setState(() {});
     });
   } // This closing tag was missing
   @override
   void dispose() {
-    print("call dispose method of HomeVideoWidget");
-    videoPlayerController.dispose();
+    videoPlayerController?.dispose();
     super.dispose();
   }
 
@@ -98,16 +97,16 @@ class _HomeVideoWidgetState extends State<HomeVideoWidget> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        videoPlayerController.value.isInitialized ? Center(
+        videoPlayerController!.value.isInitialized ? Center(
           child: InkWell(
-            onTap: videoPlayerController.pause,
-            onDoubleTap: videoPlayerController.play,
+            onTap: videoPlayerController!.pause,
+            onDoubleTap: videoPlayerController!.play,
             child: Container(
               width: MediaQuery.of(context).size.width,
               //height: MediaQuery.of(context).size.height / videoPlayerController.value.aspectRatio,
               child: AspectRatio(
-                  aspectRatio: videoPlayerController.value.aspectRatio,
-                  child: VideoPlayer(videoPlayerController)
+                  aspectRatio: videoPlayerController!.value.aspectRatio,
+                  child: VideoPlayer(videoPlayerController!)
               ),
             ),
           ),
@@ -144,10 +143,12 @@ class _HomeVideoWidgetState extends State<HomeVideoWidget> {
             padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
             child: InkWell(
               onTap: (){
-                videoPlayerController.pause();
+                videoPlayerController!.pause();
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeVideoNewsDetails(
                   vnews: widget.vNews,
                   vtags: widget.vNews.tags,
+                  title: widget.title,
+                  videoUrls: widget.videoUrl,
                 )));
               },
               child: Container(

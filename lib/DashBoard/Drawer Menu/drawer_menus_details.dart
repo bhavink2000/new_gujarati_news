@@ -1,4 +1,4 @@
-//@dart=2.9
+import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,14 +21,14 @@ import 'drawer_menus.dart';
 
 class DrawerMenuDetails extends StatefulWidget {
   var id,name;
-  DrawerMenuDetails({Key key,this.id,this.name}) : super(key: key);
+  DrawerMenuDetails({Key? key,this.id,this.name}) : super(key: key);
 
   @override
   State<DrawerMenuDetails> createState() => _DrawerMenuDetailsState();
 }
 
 class _DrawerMenuDetailsState extends State<DrawerMenuDetails> {
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -46,6 +46,8 @@ class _DrawerMenuDetailsState extends State<DrawerMenuDetails> {
     scrollController.removeListener(_scrollListner);
     super.dispose();
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,16 +57,14 @@ class _DrawerMenuDetailsState extends State<DrawerMenuDetails> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-        child: isLoading == false ? cateNews == null ? ServerHelper() : cateNews.isEmpty ? const DataHelper() : ListView.builder(
+        child: isLoading == false ? cateNews == null ? ServerHelper() : cateNews!.isEmpty ? const DataHelper() : ListView.builder(
           physics: const BouncingScrollPhysics(),
           controller: scrollController,
-          itemCount: isLoadingMore == false ? cateNews.length + 1 : cateNews.length,
+          itemCount: isLoadingMore == false ? cateNews!.length + 1 : cateNews!.length,
           itemBuilder: (context, index){
-            print("cateNews.length==>${cateNews.length}");
-            print("index==>${index}");
-            if(index < cateNews.length){
+            if(index < cateNews!.length){
               DateFormat format = DateFormat("yyyy-MM-dd HH:mm:ss");
-              var formattedDate = format.parse(cateNews[index].startedAt.toString());
+              var formattedDate = format.parse(cateNews![index].startedAt.toString());
               var mDate = DateFormat.yMMMd().format(formattedDate);
               var time = DateFormat.jm().format(formattedDate);
               return Padding(
@@ -101,8 +101,8 @@ class _DrawerMenuDetailsState extends State<DrawerMenuDetails> {
                                       InkWell(
                                         onTap: (){
                                           ShareData().shareData(
-                                            cateNews[index].title,
-                                            cateNews[index].newsLink,
+                                            cateNews?[index].title,
+                                            cateNews?[index].newsLink,
                                           );
                                         },
                                         child: Image(
@@ -122,26 +122,26 @@ class _DrawerMenuDetailsState extends State<DrawerMenuDetails> {
                               child: InkWell(
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                                    categorynm: cateNews[index].categoryName,
-                                    categoryid: cateNews[index].categoryId,
-                                    title: cateNews[index].title,
-                                    en_title: cateNews[index].enTitle,
-                                    news_image: cateNews[index].newsImage,
-                                    banner_description: cateNews[index].bannerDescription,
-                                    description: cateNews[index].description,
-                                    slug: cateNews[index].slug,
-                                    started_at: cateNews[index].startedAt,
-                                    ended_at: cateNews[index].endedAt,
-                                    status: "${cateNews[index].status}",
-                                    author_id: "${cateNews[index].authorId}",
-                                    author_image: cateNews[index].authorImage,
-                                    name: cateNews[index].name,
-                                    image: cateNews[index].authorImage,
-                                    tags: cateNews[index].tags,
+                                    categoryNm: cateNews?[index].categoryName,
+                                    categoryId: cateNews?[index].categoryId,
+                                    title: cateNews?[index].title,
+                                    en_title: cateNews?[index].enTitle,
+                                    news_image: cateNews?[index].newsImage,
+                                    banner_description: cateNews?[index].bannerDescription,
+                                    description: cateNews?[index].description,
+                                    slug: cateNews?[index].slug,
+                                    started_at: cateNews?[index].startedAt,
+                                    ended_at: cateNews?[index].endedAt,
+                                    status: "${cateNews?[index].status}",
+                                    author_id: "${cateNews?[index].authorId}",
+                                    author_image: cateNews?[index].authorImage,
+                                    name: cateNews?[index].name,
+                                    image: cateNews?[index].authorImage,
+                                    tags: cateNews![index].tags,
                                   )));
                                 },
                                 child: Text(
-                                    cateNews[index].title ?? "",
+                                    cateNews![index].title ?? "",
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(fontSize: 14,fontFamily: FontType.AnekGujaratiSemiBold,color: Colors.black)
@@ -157,30 +157,29 @@ class _DrawerMenuDetailsState extends State<DrawerMenuDetails> {
                             width: DrawerMenuSizeHelper(context).SubImageW,
                             height: DrawerMenuSizeHelper(context).SubImageH,
                             //color: Colors.teal,
-                            //height: MediaQuery.of(context).size.height / 6,color: Colors.green,
                             child: InkWell(
                               onTap: (){
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                                  categorynm: cateNews[index].categoryName,
-                                  categoryid: cateNews[index].categoryId,
-                                  title: cateNews[index].title,
-                                  en_title: cateNews[index].enTitle,
-                                  news_image: cateNews[index].newsImage,
-                                  banner_description: cateNews[index].bannerDescription,
-                                  description: cateNews[index].description,
-                                  slug: cateNews[index].slug,
-                                  started_at: cateNews[index].startedAt,
-                                  ended_at: cateNews[index].endedAt,
-                                  status: "${cateNews[index].status}",
-                                  author_id: "${cateNews[index].authorId}",
-                                  author_image: cateNews[index].authorImage,
-                                  name: cateNews[index].name,
-                                  image: cateNews[index].authorImage,
-                                  tags: cateNews[index].tags,
+                                  categoryNm: cateNews?[index].categoryName,
+                                  categoryId: cateNews?[index].categoryId,
+                                  title: cateNews?[index].title,
+                                  en_title: cateNews?[index].enTitle,
+                                  news_image: cateNews?[index].newsImage,
+                                  banner_description: cateNews?[index].bannerDescription,
+                                  description: cateNews?[index].description,
+                                  slug: cateNews?[index].slug,
+                                  started_at: cateNews?[index].startedAt,
+                                  ended_at: cateNews?[index].endedAt,
+                                  status: "${cateNews?[index].status}",
+                                  author_id: "${cateNews?[index].authorId}",
+                                  author_image: cateNews?[index].authorImage,
+                                  name: cateNews?[index].name,
+                                  image: cateNews?[index].authorImage,
+                                  tags: cateNews![index].tags,
                                 )));
                               },
-                              child: cateNews[index].newsImage != null ? CachedNetworkImage(
-                                imageUrl: cateNews[index].newsImage,
+                              child: cateNews?[index].newsImage != null ? CachedNetworkImage(
+                                imageUrl: cateNews![index].newsImage,
                                 imageBuilder: (context, imageProvider) => Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
@@ -203,7 +202,7 @@ class _DrawerMenuDetailsState extends State<DrawerMenuDetails> {
               );
             }
             else{
-              return cateNews.length == 25 ? Center(
+              return cateNews!.length == 25 ? Center(
                 child: CircularProgressIndicator(
                   color: RedColor,
                 ),
@@ -231,10 +230,10 @@ class _DrawerMenuDetailsState extends State<DrawerMenuDetails> {
     }
   }
 
-  Future<GeneralNewsModel> categoryOBJ;
+  Future<GeneralNewsModel?>? categoryOBJ;
   List<GNews> cateNewsSData = [];
   List<GData> cateNewsMData = [];
-  List<GNews> cateNews;
+  List<GNews>? cateNews;
 
   getCategoryNews(cateId,offset) async {
     setState(() {
@@ -242,7 +241,7 @@ class _DrawerMenuDetailsState extends State<DrawerMenuDetails> {
     });
     try {
       final response = await ApiFuture().categoryWiseNews(ApiUrl.AllNews,cateId,offset);
-      final newsList = response.data.news;
+      final newsList = response!.data.news;
       final uniqueNews = newsList.toSet();
       cateNews = uniqueNews.toList();
       setState(() {

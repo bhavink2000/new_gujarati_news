@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../../../App Helper/Ui Helper/color_and_font_helper.dart';
@@ -8,7 +7,7 @@ import '../drawer_menus.dart';
 import 'web_stories_show.dart';
 
 class WebStoriesView extends StatefulWidget {
-  const WebStoriesView({Key key}) : super(key: key);
+  const WebStoriesView({Key? key}) : super(key: key);
 
   @override
   State<WebStoriesView> createState() => _WebStoriesViewState();

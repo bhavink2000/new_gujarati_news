@@ -1,8 +1,7 @@
-//@dart=2.9
 import 'package:flutter/material.dart';
 
 class SearchMenu extends StatefulWidget {
-  const SearchMenu({Key key}) : super(key: key);
+  const SearchMenu({Key? key}) : super(key: key);
 
   @override
   State<SearchMenu> createState() => _SearchState();

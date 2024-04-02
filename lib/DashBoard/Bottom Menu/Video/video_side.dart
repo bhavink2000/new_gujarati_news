@@ -1,11 +1,10 @@
-//@dart=2.9
 import 'package:flutter/material.dart';
 
 import '../../../App Helper/Service/share_data.dart';
 
 class VideoSideBar extends StatefulWidget {
   var title,desc,date,videourl;
-  VideoSideBar({Key key,this.title,this.desc,this.date,this.videourl}) : super(key: key);
+  VideoSideBar({Key? key,this.title,this.desc,this.date,this.videourl}) : super(key: key);
 
   @override
   State<VideoSideBar> createState() => _VideoSideBarState();

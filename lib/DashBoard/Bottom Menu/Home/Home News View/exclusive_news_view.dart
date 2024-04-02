@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,19 +11,13 @@ import '../news_details_page.dart';
 class HomeExclusiveNews extends StatefulWidget {
   List<GNews> eNewsSData;
   bool isLoading;
-  HomeExclusiveNews({Key key,this.eNewsSData,this.isLoading}) : super(key: key);
+  HomeExclusiveNews({Key? key,required this.eNewsSData,required this.isLoading}) : super(key: key);
 
   @override
   State<HomeExclusiveNews> createState() => _HomeExclusiveNewsState();
 }
 
 class _HomeExclusiveNewsState extends State<HomeExclusiveNews> {
-
-  bool isLoading;
-  void initState() {
-    super.initState();
-    isLoading = widget.isLoading;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +37,8 @@ class _HomeExclusiveNewsState extends State<HomeExclusiveNews> {
             child: InkWell(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                  categorynm: widget.eNewsSData[index].categoryName,
-                  categoryid: widget.eNewsSData[index].categoryId,
+                  categoryNm: widget.eNewsSData[index].categoryName,
+                  categoryId: widget.eNewsSData[index].categoryId,
                   title: widget.eNewsSData[index].title,
                   en_title: widget.eNewsSData[index].enTitle,
                   news_image: widget.eNewsSData[index].newsImage,
@@ -79,14 +72,14 @@ class _HomeExclusiveNewsState extends State<HomeExclusiveNews> {
                   children: [
                     widget.eNewsSData[index].newsImage != null ? CachedNetworkImage(
                       imageUrl: widget.eNewsSData[index].newsImage,
-                      imageBuilder: (context, imageprovider) => Padding(
+                      imageBuilder: (context, imageProvider) => Padding(
                         padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                         child: Container(
                           height: MediaQuery.of(context).size.height / 4.5,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
                               image: DecorationImage(
-                                  image: imageprovider,
+                                  image: imageProvider,
                                   fit: BoxFit.fill,
                                   colorFilter: const ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)
                               )
@@ -106,7 +99,8 @@ class _HomeExclusiveNewsState extends State<HomeExclusiveNews> {
                         widget.eNewsSData[index].title ?? "",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Colors.white,fontSize: 18,fontFamily: FontType.AnekGujaratiBold),),
+                        style: const TextStyle(color: Colors.white,fontSize: 18,fontFamily: FontType.AnekGujaratiBold),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 0, 15, 14),

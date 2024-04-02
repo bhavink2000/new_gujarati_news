@@ -14,5 +14,3 @@ class ApiUrl{
 
   static const AllLiveWire = Url + "all-threads";
 }
-
-// static const Url = "https://trialatwork.com/newgnews/api/";

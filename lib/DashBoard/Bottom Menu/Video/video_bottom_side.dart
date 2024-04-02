@@ -1,4 +1,3 @@
-//@dart=2.9
 // ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import '../../../App Helper/Ui Helper/color_and_font_helper.dart';
 
 class VideoBottomMenu extends StatefulWidget {
   var title,slug,desc,videourl,date;
-  VideoBottomMenu({Key key,this.title,this.slug,this.desc,this.videourl,this.date}) : super(key: key);
+  VideoBottomMenu({Key? key,this.title,this.slug,this.desc,this.videourl,this.date}) : super(key: key);
 
   @override
   State<VideoBottomMenu> createState() => _VideoBottomMenuState();

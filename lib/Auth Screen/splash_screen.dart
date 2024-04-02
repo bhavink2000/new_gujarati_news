@@ -1,5 +1,3 @@
-//@dart=2.9
-// ignore_for_file: non_constant_identifier_names
 
 import 'dart:async';
 import 'dart:io';
@@ -15,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../DashBoard/dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key key}) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -23,9 +21,9 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  SharedPreferences loginData;
-  String deviceId;
-  AppUpdateInfo _updateInfo;
+  SharedPreferences? loginData;
+  String? deviceId;
+  AppUpdateInfo? _updateInfo;
 
   @override
   void initState() {
@@ -33,17 +31,16 @@ class _SplashScreenState extends State<SplashScreen> {
     checkForUpdates();
     Future.delayed(const Duration(seconds: 1),(){
       setState(() {
-        CheckDeviceId();
+        checkDeviceId();
       });
     });
-
   }
 
-  void CheckDeviceId() async {
+  void checkDeviceId() async {
     loginData = await SharedPreferences.getInstance();
-    loginData.setBool('login', false);
+    loginData!.setBool('login', false);
     setState(() {
-      deviceId = loginData.getString('device_id');
+      deviceId = loginData!.getString('device_id');
     });
     if(deviceId == null){
       getDeviceId();
@@ -54,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  Future<String> getDeviceId() async {
+  Future<String?> getDeviceId() async {
     final prefs = await SharedPreferences.getInstance();
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
@@ -78,14 +75,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> checkForUpdates() async {
-    print("calling");
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String currentVersion = packageInfo.version;
     InAppUpdate.checkForUpdate().then((info) {
       setState(() {
         _updateInfo = info;
-        if (_updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-          if (currentVersion != _updateInfo.availableVersionCode) {
+        if (_updateInfo!.updateAvailability == UpdateAvailability.updateAvailable) {
+          if (currentVersion != _updateInfo!.availableVersionCode) {
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -112,13 +108,12 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       });
     });
-    print("called");
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -126,7 +121,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const AnimationLimiter(
+              AnimationLimiter(
                   child: AnimationConfiguration.staggeredList(
                       position: 1,
                       duration: Duration(milliseconds: 1000),
@@ -138,9 +133,9 @@ class _SplashScreenState extends State<SplashScreen> {
                       )
                   )
               ),
-              const SizedBox(width: 5),
+              SizedBox(width: 5),
               Column(
-                children: const [
+                children: [
                   AnimationLimiter(
                       child: AnimationConfiguration.staggeredList(
                           position: 5,

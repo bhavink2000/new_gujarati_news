@@ -1,11 +1,10 @@
-//@dart=2.9
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stories/flutter_stories.dart';
 
 class WebStoriesShow extends StatefulWidget {
-  const WebStoriesShow({Key key}) : super(key: key);
+  const WebStoriesShow({Key? key}) : super(key: key);
 
   @override
   State<WebStoriesShow> createState() => _WebStoriesShowState();

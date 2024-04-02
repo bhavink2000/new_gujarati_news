@@ -1,4 +1,3 @@
-//@dart=2.9
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,7 +10,7 @@ import '../news_details_page.dart';
 
 
 class BusinessN extends StatefulWidget {
-  const BusinessN({Key key}) : super(key: key);
+  const BusinessN({Key? key}) : super(key: key);
 
   @override
   State<BusinessN> createState() => _BusinessNState();
@@ -19,7 +18,7 @@ class BusinessN extends StatefulWidget {
 
 class _BusinessNState extends State<BusinessN> {
 
-  bool isLoading;
+  bool? isLoading;
   bool isLoadingMore = false;
   final scrollController = ScrollController();
   int offset = 0;
@@ -66,11 +65,11 @@ class _BusinessNState extends State<BusinessN> {
                   ),
                   physics: const BouncingScrollPhysics(),
                   controller: scrollController,
-                  itemCount: isLoadingMore == false ? businessNews.length + 1 : businessNews.length,
+                  itemCount: isLoadingMore == false ? businessNews!.length + 1 : businessNews!.length,
                   itemBuilder: (context, index){
-                    if(index < businessNews.length){
+                    if(index < businessNews!.length){
                       DateFormat format = DateFormat("yyyy-MM-dd HH:mm:ss");
-                      var formattedDate = format.parse(businessNews[index].startedAt.toString());
+                      var formattedDate = format.parse(businessNews![index].startedAt.toString());
                       var mDate = DateFormat.yMMMd().format(formattedDate);
                       var time = DateFormat.jm().format(formattedDate);
                       return Padding(
@@ -78,21 +77,21 @@ class _BusinessNState extends State<BusinessN> {
                         child: InkWell(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetailsPage(
-                              categorynm: businessNews[index].categoryName,
-                              categoryid: businessNews[index].categoryId,
-                              title: businessNews[index].title,
-                              en_title: businessNews[index].enTitle,
-                              news_image: businessNews[index].newsImage,
-                              banner_description: businessNews[index].bannerDescription,
-                              description: businessNews[index].description,
-                              slug: businessNews[index].slug,
-                              started_at: businessNews[index].startedAt,
-                              ended_at: businessNews[index].endedAt,
-                              status: "${businessNews[index].status}",
-                              author_id: "${businessNews[index].authorId}",
-                              author_image: businessNews[index].authorImage,
-                              name: businessNews[index].name,
-                              image: businessNews[index].authorImage,
+                              categoryNm: businessNews?[index].categoryName,
+                              categoryId: businessNews?[index].categoryId,
+                              title: businessNews?[index].title,
+                              en_title: businessNews?[index].enTitle,
+                              news_image: businessNews?[index].newsImage,
+                              banner_description: businessNews?[index].bannerDescription,
+                              description: businessNews?[index].description,
+                              slug: businessNews?[index].slug,
+                              started_at: businessNews?[index].startedAt,
+                              ended_at: businessNews?[index].endedAt,
+                              status: "${businessNews?[index].status}",
+                              author_id: "${businessNews?[index].authorId}",
+                              author_image: businessNews?[index].authorImage,
+                              name: businessNews?[index].name,
+                              image: businessNews?[index].authorImage,
                               tags: businessNewsSData[index].tags,
                             )));
                           },
@@ -110,7 +109,7 @@ class _BusinessNState extends State<BusinessN> {
                                       Padding(
                                         padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
                                         child: Text(
-                                          businessNews[index].title ?? "",
+                                          businessNews?[index].title ?? "",
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(fontFamily: FontType.AnekGujaratiSemiBold,letterSpacing: 0.5,fontSize: 14),
@@ -121,7 +120,7 @@ class _BusinessNState extends State<BusinessN> {
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(businessNews[index].name ?? "UNKNOWN",
+                                            Text(businessNews?[index].name ?? "UNKNOWN",
                                               style: TextStyle(fontFamily: FontType.AnekGujaratiSemiBold,letterSpacing: 0.5,fontSize: 11),
                                             ),
                                             Text("$mDate $time" ?? "",style: TextStyle(color: Colors.black,fontSize: 10),)
@@ -151,6 +150,7 @@ class _BusinessNState extends State<BusinessN> {
       ),
     );
   }
+
   Future<void> _scrollListner()async{
     if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
       setState((){
@@ -168,10 +168,10 @@ class _BusinessNState extends State<BusinessN> {
   }
 
 
-  Future<GeneralNewsModel> businessNewsOBJ;
+  Future<GeneralNewsModel?>? businessNewsOBJ;
   List<GNews> businessNewsSData = [];
   List<GData> businessNewsMData = [];
-  List<GNews> businessNews;
+  List<GNews>? businessNews;
 
   getBusinessNews(cateId,offset) async {
     setState(() {
@@ -179,8 +179,8 @@ class _BusinessNState extends State<BusinessN> {
     });
     try {
       businessNewsOBJ = ApiFuture().categoryWiseNews(ApiUrl.AllNews,cateId,offset);
-      await businessNewsOBJ.then((value) async {
-        businessNewsSData.addAll(value.data.news);
+      await businessNewsOBJ!.then((value) async {
+        businessNewsSData.addAll(value!.data.news);
         businessNewsMData.add(value.data);
       });
       setState(() {
