@@ -226,6 +226,7 @@ class _DrawerMenusState extends State<DrawerMenus> {
     }
     setState(() {});
   }
+
   Future<CategoryModel> categoryName(String url) async {
     final cacheManager = DefaultCacheManager();
     final file = await cacheManager.getSingleFile(url);
